@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Clear Coat — Site Measure</title>
+<link rel="apple-touch-icon" href="data:,">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #1a1a1a;
+    color: #f0ece4;
+    padding-bottom: 6rem;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 1.1rem 1rem;
+    border-bottom: 1px solid #333;
+    position: sticky;
+    top: 0;
+    background: #1a1a1a;
+    z-index: 10;
+  }
+
+  .logo-hex {
+    width: 30px;
+    height: 30px;
+    background: #c8a96e;
+    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.85rem;
+    color: #1a1a1a;
+    flex-shrink: 0;
+  }
+
+  .header h1 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #c8c0b0;
+  }
+
+  .container { padding: 1rem; max-width: 640px; margin: 0 auto; }
+
+  .card {
+    background: #242424;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #c8a96e;
+    margin-bottom: 0.75rem;
+  }
+
+  label {
+    display: block;
+    font-size: 0.7rem;
+    color: #999;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+
+  input[type="text"], input[type="number"], select, textarea {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 0.65rem 0.8rem;
+    color: #f0ece4;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+  }
+
+  input:focus, select:focus, textarea:focus { border-color: #c8a96e; }
+
+  .field { margin-bottom: 0.85rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  .field-row { display: flex; gap: 0.6rem; }
+  .field-row .field { flex: 1; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #f0ece4;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .btn:active { background: #2c2c2c; }
+
+  .btn-gold {
+    background: #c8a96e;
+    color: #1a1a1a;
+    border-color: #c8a96e;
+  }
+
+  .btn-full { width: 100%; }
+
+  .toggle-row { display: flex; gap: 0.5rem; }
+
+  .toggle-btn {
+    flex: 1;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #999;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .toggle-btn.active {
+    background: rgba(200,169,110,0.15);
+    border-color: #c8a96e;
+    color: #c8a96e;
+  }
+
+  .opening-card {
+    background: #242424;
+    border: 1px solid #333;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+
+  .opening-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.1rem;
+    background: #2a2a2a;
+    border-bottom: 1px solid #333;
+  }
+
+  .opening-num {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #c8a96e;
+    letter-spacing: 0.02em;
+  }
+
+  .opening-lm {
+    font-size: 0.75rem;
+    color: #999;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .opening-del {
+    background: none;
+    border: none;
+    color: #777;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .opening-body { padding: 1.1rem; }
+
+  .photo-box {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #1a1a1a;
+    border: 1px dashed #444;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 0.85rem;
+    position: relative;
+  }
+
+  .photo-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .photo-placeholder { color: #555; font-size: 0.8rem; text-align: center; padding: 1rem; }
+
+  .photo-retake {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    background: rgba(26,26,26,0.85);
+    border: 1px solid #555;
+    border-radius: 6px;
+    color: #f0ece4;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .hidden { display: none !important; }
+
+  .sub-fields { margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px solid #2e2e2e; }
+
+  .footer-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #202020;
+    border-top: 1px solid #333;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 20;
+  }
+
+  .footer-stats { flex: 1; }
+
+  .footer-lm { font-size: 1.15rem; font-weight: 700; color: #c8a96e; }
+  .footer-count { font-size: 0.7rem; color: #888; }
+
+  .empty-msg {
+    text-align: center;
+    color: #555;
+    font-size: 0.85rem;
+    padding: 2rem 1rem;
+  }
+
+  .hint { font-size: 0.68rem; color: #666; margin-top: 0.3rem; line-height: 1.4; }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo-hex">C</div>
+    <h1>Site Measure</h1>
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <p class="section-title">Job Details</p>
+      <div class="field">
+        <label>Client Name</label>
+        <input type="text" id="job-client" placeholder="e.g. Diane Parkin" oninput="saveState()">
+      </div>
+      <div class="field">
+        <label>Job Address</label>
+        <input type="text" id="job-address" placeholder="e.g. 3 Chenin Place, Greenmeadows" oninput="saveState()">
+      </div>
+    </div>
+
+    <div id="openings-list"></div>
+
+    <div id="empty-msg" class="empty-msg">No openings added yet — tap "Add Window" or "Add Door" below to start.</div>
+
+    <div class="field-row" style="margin-bottom: 1rem;">
+      <button class="btn btn-full" onclick="addOpening('window')">+ Add Window</button>
+      <button class="btn btn-full" onclick="addOpening('door')">+ Add Door</button>
+    </div>
+
+    <div class="card">
+      <p class="section-title">Export &amp; Reset</p>
+      <div class="field-row">
+        <button class="btn btn-gold btn-full" onclick="exportJSON()">Export Data (for Claude)</button>
+      </div>
+      <div class="hint" style="margin-bottom:0.85rem;">Downloads a single file with every measurement, photo and note — drop it straight into the job folder and Claude reads it directly, no photo-by-photo transcription needed.</div>
+      <div class="field-row">
+        <button class="btn btn-full" onclick="exportPDF()">Export PDF Summary</button>
+        <button class="btn btn-full" onclick="newJob()">New Job (Clear)</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bar">
+    <div class="footer-stats">
+      <div class="footer-lm" id="footer-lm">0.00 lm</div>
+      <div class="footer-count" id="footer-count">0 openings</div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const STORAGE_KEY = 'clearcoat_site_measure_v1';
+    let state = { job: { client: '', address: '' }, openings: [] };
+    let nextId = 1;
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          state = JSON.parse(raw);
+          if (state.openings.length) {
+            nextId = Math.max(...state.openings.map(o => o.id)) + 1;
+          }
+        }
+      } catch (e) { console.error('load failed', e); }
+    }
+
+    function saveState() {
+      state.job.client = document.getElementById('job-client').value;
+      state.job.address = document.getElementById('job-address').value;
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.error('save failed — storage may be full', e);
+      }
+    }
+
+    function newJob() {
+      if (!confirm('Clear all current job data? Export first if you need it.')) return;
+      state = { job: { client: '', address: '' }, openings: [] };
+      nextId = 1;
+      localStorage.removeItem(STORAGE_KEY);
+      document.getElementById('job-client').value = '';
+      document.getElementById('job-address').value = '';
+      render();
+    }
+
+    function addOpening(type) {
+      const opening = {
+        id: nextId++,
+        type: type, // 'window' | 'door'
+        photo: null,
+        width: '',
+        height: '',
+        frameMultiplier: type === 'door' ? DOOR_DEFAULT_MULTIPLIER['single'] : 1.0,
+        cornerShared: false,
+        sashCount: 0, // 0, 1, 2
+        sashOrientation: 'vertical', // 'vertical' | 'horizontal'
+        sashMechanism: 'hinged', // 'hinged' | 'sliding'
+        doorType: 'single', // 'single' | 'french' | 'single_slider' | 'double_slider' | 'double_stacker' | 'triple_stacker'
+        panelCount: 1,
+        notes: ''
+      };
+      state.openings.push(opening);
+      saveState();
+      render();
+      setTimeout(() => {
+        const el = document.getElementById('opening-' + opening.id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+
+    function deleteOpening(id) {
+      if (!confirm('Delete this opening?')) return;
+      state.openings = state.openings.filter(o => o.id !== id);
+      saveState();
+      render();
+    }
+
+    function updateOpening(id, field, value) {
+      const o = state.openings.find(o => o.id === id);
+      if (!o) return;
+      o[field] = value;
+      saveState();
+      render();
+    }
+
+    function handlePhoto(id, input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const maxW = 900;
+          const scale = Math.min(1, maxW / img.width);
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+          updateOpening(id, 'photo', dataUrl);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function computeLm(o) {
+      const w = parseFloat(o.width) / 1000 || 0;
+      const h = parseFloat(o.height) / 1000 || 0;
+      if (!w || !h) return 0;
+
+      if (o.type === 'window') {
+        let perimeter = o.cornerShared ? (2 * w + h) : (2 * (w + h));
+        let sashAdd = 0;
+        if (o.sashCount > 0) {
+          const unit = o.sashOrientation === 'vertical' ? h : w;
+          sashAdd = unit * o.sashCount;
+        }
+        return perimeter + sashAdd;
+      } else {
+        const panels = parseInt(o.panelCount) || 1;
+        const category = DOOR_CATEGORY[o.doorType] || 'hinged';
+        if (category === 'hinged') {
+          // each panel measured as its own full perimeter (even width split)
+          const panelW = w / panels;
+          return panels * 2 * (panelW + h);
+        } else {
+          // sliding/stacker: outer perimeter + one internal upright per panel join,
+          // plus one extra upright for the closing edge (panel closes against a separate fixed jamb member)
+          const uprights = panels;
+          return 2 * (w + h) + uprights * h;
+        }
+      }
+    }
+
+    const DOOR_CATEGORY = {
+      single: 'hinged',
+      french: 'hinged',
+      bifold: 'hinged',
+      single_slider: 'sliding',
+      double_slider: 'sliding',
+      double_stacker: 'sliding',
+      triple_stacker: 'sliding'
+    };
+
+    const DOOR_DEFAULT_PANELS = {
+      single: 1,
+      french: 2,
+      bifold: 4,
+      single_slider: 2,
+      double_slider: 4,
+      double_stacker: 3,
+      triple_stacker: 3
+    };
+
+    const DOOR_DEFAULT_MULTIPLIER = {
+      single: 1.5,
+      french: 1.5,
+      bifold: 1.5,
+      single_slider: 1.0,
+      double_slider: 1.0,
+      double_stacker: 1.0,
+      triple_stacker: 1.0
+    };
+
+    const DOOR_LABELS = {
+      single: 'Single hinged leaf',
+      french: 'French door',
+      bifold: 'Bifold door',
+      single_slider: 'Single slider',
+      double_slider: 'Double slider door',
+      double_stacker: 'Double stacker',
+      triple_stacker: 'Triple stacker'
+    };
+
+    function updateDoorType(id, value) {
+      const o = state.openings.find(o => o.id === id);
+      if (!o) return;
+      o.doorType = value;
+      o.panelCount = DOOR_DEFAULT_PANELS[value] || 1;
+      o.frameMultiplier = DOOR_DEFAULT_MULTIPLIER[value] || 1.0;
+      saveState();
+      render();
+    }
+
+    function updateFooter() {
+      let totalLm = 0;
+      state.openings.forEach(o => totalLm += computeLm(o));
+      document.getElementById('footer-lm').textContent = totalLm.toFixed(2) + ' lm';
+      document.getElementById('footer-count').textContent = state.openings.length + ' opening' + (state.openings.length === 1 ? '' : 's') +
+        ' (' + state.openings.filter(o => o.type === 'window').length + ' windows, ' +
+        state.openings.filter(o => o.type === 'door').length + ' doors)';
+    }
+
+    // Lightweight update for text/number fields — updates state + the one lm badge + footer
+    // WITHOUT rebuilding the whole list, so the input you're typing in never loses focus.
+    function updateOpeningLight(id, field, value) {
+      const o = state.openings.find(o => o.id === id);
+      if (!o) return;
+      o[field] = value;
+      saveState();
+      const lmEl = document.getElementById('opening-lm-' + id);
+      if (lmEl) lmEl.textContent = computeLm(o).toFixed(2) + ' lm';
+      updateFooter();
+    }
+
+    function render() {
+      const list = document.getElementById('openings-list');
+      const empty = document.getElementById('empty-msg');
+      document.getElementById('job-client').value = state.job.client || '';
+      document.getElementById('job-address').value = state.job.address || '';
+
+      if (!state.openings.length) {
+        list.innerHTML = '';
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+        list.innerHTML = state.openings.map((o, idx) => renderOpening(o, idx + 1)).join('');
+      }
+
+      updateFooter();
+    }
+
+    function renderOpening(o, num) {
+      const label = 'W' + num;
+      const lm = computeLm(o).toFixed(2);
+      const photoHtml = o.photo
+        ? `<img src="${o.photo}" alt="${label}"><button class="photo-retake" onclick="document.getElementById('file-${o.id}').click()">Retake</button>`
+        : `<div class="photo-placeholder">Tap to take photo</div>`;
+
+      let typeFields = '';
+      if (o.type === 'window') {
+        typeFields = `
+          <div class="field">
+            <label>Corner-Shared Upright</label>
+            <div class="toggle-row">
+              <div class="toggle-btn ${!o.cornerShared ? 'active' : ''}" onclick="updateOpening(${o.id},'cornerShared',false)">No</div>
+              <div class="toggle-btn ${o.cornerShared ? 'active' : ''}" onclick="updateOpening(${o.id},'cornerShared',true)">Yes — shares corner</div>
+            </div>
+            <div class="hint">Only if this window shares an upright with the window next to it at a corner</div>
+          </div>
+          <div class="field">
+            <label>Opening Sash</label>
+            <div class="toggle-row">
+              <div class="toggle-btn ${o.sashCount === 0 ? 'active' : ''}" onclick="updateOpening(${o.id},'sashCount',0)">None</div>
+              <div class="toggle-btn ${o.sashCount === 1 ? 'active' : ''}" onclick="updateOpening(${o.id},'sashCount',1)">1 Sash</div>
+              <div class="toggle-btn ${o.sashCount === 2 ? 'active' : ''}" onclick="updateOpening(${o.id},'sashCount',2)">2 Sashes</div>
+            </div>
+          </div>
+          ${o.sashCount > 0 ? `
+          <div class="field">
+            <label>Sash Direction</label>
+            <div class="toggle-row">
+              <div class="toggle-btn ${o.sashOrientation === 'vertical' ? 'active' : ''}" onclick="updateOpening(${o.id},'sashOrientation','vertical')">Side-Opening</div>
+              <div class="toggle-btn ${o.sashOrientation === 'horizontal' ? 'active' : ''}" onclick="updateOpening(${o.id},'sashOrientation','horizontal')">Top/Bottom-Opening</div>
+            </div>
+            <div class="hint">This is just for the lm calculation — quotes always say "with opening sash" either way</div>
+          </div>
+          <div class="field">
+            <label>Sash Mechanism</label>
+            <div class="toggle-row">
+              <div class="toggle-btn ${o.sashMechanism === 'hinged' ? 'active' : ''}" onclick="updateOpening(${o.id},'sashMechanism','hinged')">Hinged (awning/casement)</div>
+              <div class="toggle-btn ${o.sashMechanism === 'sliding' ? 'active' : ''}" onclick="updateOpening(${o.id},'sashMechanism','sliding')">Sliding Panel</div>
+            </div>
+            <div class="hint">A sliding panel runs in a track instead of swinging open — flag it here even though the lm math is the same for now</div>
+          </div>` : ''}
+          <div class="field">
+            <label>Frame Width Multiplier</label>
+            <input type="number" min="0.5" max="5" step="0.1" value="${o.frameMultiplier}" oninput="updateOpeningLight(${o.id},'frameMultiplier',this.value)">
+            <div class="hint">Standard 75–100mm = 1.0 · 150mm = 1.5 · 200mm = 2.0 — affects time/cost, not the lm figure</div>
+          </div>
+        `;
+      } else {
+        typeFields = `
+          <div class="field">
+            <label>Door Type</label>
+            <select onchange="updateDoorType(${o.id},this.value)">
+              ${Object.keys(DOOR_LABELS).map(key => `<option value="${key}" ${o.doorType === key ? 'selected' : ''}>${DOOR_LABELS[key]}</option>`).join('')}
+            </select>
+          </div>
+          <div class="field">
+            <label>Number of Panels</label>
+            <input type="number" min="1" max="8" value="${o.panelCount}" oninput="updateOpeningLight(${o.id},'panelCount',this.value)">
+            <div class="hint">${DOOR_CATEGORY[o.doorType] === 'hinged' ? 'Each panel measured as its own full frame (leaves split evenly across the width)' : 'Outer perimeter + one internal upright per panel join'} — default filled in, adjust if this door's different</div>
+          </div>
+          <div class="field">
+            <label>Frame Width Multiplier</label>
+            <input type="number" min="0.5" max="5" step="0.1" value="${o.frameMultiplier}" oninput="updateOpeningLight(${o.id},'frameMultiplier',this.value)">
+            <div class="hint">Door frames often run wider than window frames — affects time/cost, not the lm figure</div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="opening-card" id="opening-${o.id}">
+          <div class="opening-head">
+            <div>
+              <span class="opening-num">${label}</span>
+              <span style="color:#666; font-size:0.75rem; margin-left:0.5rem;">${o.type === 'window' ? 'Window' : 'Door'}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span class="opening-lm" id="opening-lm-${o.id}">${lm} lm</span>
+              <button class="opening-del" onclick="deleteOpening(${o.id})">✕</button>
+            </div>
+          </div>
+          <div class="opening-body">
+            <div class="photo-box" onclick="${o.photo ? '' : `document.getElementById('file-${o.id}').click()`}">
+              ${photoHtml}
+            </div>
+            <input type="file" id="file-${o.id}" accept="image/*" capture="environment" class="hidden" onchange="handlePhoto(${o.id}, this)">
+
+            <div class="field-row">
+              <div class="field">
+                <label>Width (mm)</label>
+                <input type="number" inputmode="numeric" value="${o.width}" placeholder="e.g. 1440" oninput="updateOpeningLight(${o.id},'width',this.value)">
+              </div>
+              <div class="field">
+                <label>Height (mm)</label>
+                <input type="number" inputmode="numeric" value="${o.height}" placeholder="e.g. 1840" oninput="updateOpeningLight(${o.id},'height',this.value)">
+              </div>
+            </div>
+
+            <div class="sub-fields">
+              ${typeFields}
+              <div class="field" style="margin-top:0.85rem;">
+                <label>Notes (optional)</label>
+                <textarea rows="2" placeholder="Anything unusual — e.g. timber door leaf, obstructed photo, etc." oninput="updateOpeningLight(${o.id},'notes',this.value)">${o.notes}</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function exportJSON() {
+      saveState();
+      const payload = {
+        exportedAt: new Date().toISOString(),
+        job: state.job,
+        openings: state.openings.map((o, idx) => ({
+          label: 'W' + (idx + 1),
+          type: o.type,
+          widthMm: o.width,
+          heightMm: o.height,
+          frameMultiplier: Number(o.frameMultiplier) || 1.0,
+          cornerShared: o.cornerShared,
+          sashCount: o.sashCount,
+          sashOrientation: o.sashOrientation,
+          sashMechanism: o.sashMechanism,
+          doorType: o.doorType,
+          doorTypeLabel: DOOR_LABELS[o.doorType] || o.doorType,
+          panelCount: o.panelCount,
+          lm: Number(computeLm(o).toFixed(3)),
+          notes: o.notes,
+          photo: o.photo
+        }))
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const safeClient = (state.job.client || 'job').replace(/[^a-z0-9]+/gi, '_');
+      a.href = url;
+      a.download = `SiteMeasure_${safeClient}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function exportPDF() {
+      if (!window.jspdf) {
+        alert('PDF export needs a small library loaded from the internet, which didn\'t load — check you have a connection and try again, or use "Export Data (for Claude)" instead, which works fully offline. If this keeps happening, try opening this page in Safari/Chrome directly rather than inside another app\'s built-in viewer.');
+        return;
+      }
+      try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+      const pageW = 210, pageH = 297, margin = 15;
+
+      doc.setFontSize(16);
+      doc.text('Aluminium job — ' + (state.job.client || ''), margin, 20);
+      doc.setFontSize(10);
+      doc.text(state.job.address || '', margin, 27);
+
+      for (let i = 0; i < state.openings.length; i++) {
+        const o = state.openings[i];
+        doc.addPage();
+        const label = 'W' + (i + 1);
+        let y = 20;
+        doc.setFontSize(14);
+        doc.text(label + ' — ' + (o.type === 'window' ? 'Window' : 'Door'), margin, y);
+        y += 8;
+        doc.setFontSize(11);
+        const sashText = o.sashCount > 0 ? `, ${o.sashCount}x ${o.sashOrientation === 'vertical' ? 'side' : 'top/bottom'} ${o.sashMechanism === 'sliding' ? 'sliding panel' : 'sash'}` : '';
+        const cornerText = o.cornerShared ? ', corner-shared' : '';
+        const multText = (Number(o.frameMultiplier) || 1.0) !== 1.0 ? `, ${o.frameMultiplier}x frame` : '';
+        const doorText = o.type === 'door' ? `, ${DOOR_LABELS[o.doorType] || o.doorType} (${o.panelCount} panel${o.panelCount == 1 ? '' : 's'})` : '';
+        doc.text(`${o.width}W x ${o.height}H${sashText}${cornerText}${doorText}${multText} — ${computeLm(o).toFixed(2)} lm`, margin, y);
+        y += 6;
+        if (o.notes) {
+          doc.setFontSize(9);
+          doc.text('Note: ' + o.notes, margin, y);
+          y += 6;
+        }
+        if (o.photo) {
+          try {
+            const imgW = pageW - margin * 2;
+            const imgH = imgW * 0.75;
+            doc.addImage(o.photo, 'JPEG', margin, y, imgW, Math.min(imgH, pageH - y - margin));
+          } catch (e) { console.error('image add failed', e); }
+        }
+      }
+
+      const safeClient = (state.job.client || 'job').replace(/[^a-z0-9]+/gi, '_');
+      doc.save(`SiteMeasure_${safeClient}.pdf`);
+      } catch (e) {
+        console.error('PDF export failed', e);
+        alert('PDF export failed — try "Export Data (for Claude)" instead, which works fully offline and doesn\'t need this step.');
+      }
+    }
+
+    loadState();
+    render();
+  </script>
+
+</body>
+</html>

@@ -351,6 +351,7 @@
         sashMechanism: 'hinged', // 'hinged' | 'sliding'
         doorType: 'single', // 'single' | 'french' | 'single_slider' | 'double_slider' | 'double_stacker' | 'triple_stacker'
         panelCount: 1,
+        coats: 2, // 2 (standard) | 1
         notes: ''
       };
       state.openings.push(opening);
@@ -618,6 +619,14 @@
             <div class="sub-fields">
               ${typeFields}
               <div class="field" style="margin-top:0.85rem;">
+                <label>Coats</label>
+                <div class="toggle-row">
+                  <div class="toggle-btn ${(Number(o.coats)||2) === 2 ? 'active' : ''}" onclick="updateOpening(${o.id},'coats',2)">2 Coats (Standard)</div>
+                  <div class="toggle-btn ${Number(o.coats) === 1 ? 'active' : ''}" onclick="updateOpening(${o.id},'coats',1)">1 Coat</div>
+                </div>
+                <div class="hint">1 coat cuts time and product roughly in half — only use if the client's specifically chosen it</div>
+              </div>
+              <div class="field" style="margin-top:0.85rem;">
                 <label>Notes (optional)</label>
                 <textarea rows="2" placeholder="Anything unusual — e.g. timber door leaf, obstructed photo, etc." oninput="updateOpeningLight(${o.id},'notes',this.value)">${o.notes}</textarea>
               </div>
@@ -645,6 +654,7 @@
           doorType: o.doorType,
           doorTypeLabel: DOOR_LABELS[o.doorType] || o.doorType,
           panelCount: o.panelCount,
+          coats: Number(o.coats) || 2,
           lm: Number(computeLm(o).toFixed(3)),
           notes: o.notes,
           photo: o.photo
@@ -688,7 +698,8 @@
         const cornerText = o.cornerShared ? ', corner-shared' : '';
         const multText = (Number(o.frameMultiplier) || 1.0) !== 1.0 ? `, ${o.frameMultiplier}x frame` : '';
         const doorText = o.type === 'door' ? `, ${DOOR_LABELS[o.doorType] || o.doorType} (${o.panelCount} panel${o.panelCount == 1 ? '' : 's'})` : '';
-        doc.text(`${o.width}W x ${o.height}H${sashText}${cornerText}${doorText}${multText} — ${computeLm(o).toFixed(2)} lm`, margin, y);
+        const coatsText = Number(o.coats) === 1 ? ', 1 COAT ONLY' : '';
+        doc.text(`${o.width}W x ${o.height}H${sashText}${cornerText}${doorText}${multText}${coatsText} — ${computeLm(o).toFixed(2)} lm`, margin, y);
         y += 6;
         if (o.notes) {
           doc.setFontSize(9);

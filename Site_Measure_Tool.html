@@ -352,6 +352,7 @@
         doorType: 'single', // 'single' | 'french' | 'single_slider' | 'double_slider' | 'double_stacker' | 'triple_stacker'
         panelCount: 1,
         coats: 2, // 2 (standard) | 1
+        midRails: 0, // horizontal bars running the full width (e.g. at door handle height) — each adds one full width to lm
         notes: ''
       };
       state.openings.push(opening);
@@ -405,6 +406,8 @@
       const h = parseFloat(o.height) / 1000 || 0;
       if (!w || !h) return 0;
 
+      const midRailAdd = (parseInt(o.midRails) || 0) * w;
+
       if (o.type === 'window') {
         let perimeter = o.cornerShared ? (2 * w + h) : (2 * (w + h));
         let sashAdd = 0;
@@ -412,19 +415,19 @@
           const unit = o.sashOrientation === 'vertical' ? h : w;
           sashAdd = unit * o.sashCount;
         }
-        return perimeter + sashAdd;
+        return perimeter + sashAdd + midRailAdd;
       } else {
         const panels = parseInt(o.panelCount) || 1;
         const category = DOOR_CATEGORY[o.doorType] || 'hinged';
         if (category === 'hinged') {
           // each panel measured as its own full perimeter (even width split)
           const panelW = w / panels;
-          return panels * 2 * (panelW + h);
+          return panels * 2 * (panelW + h) + midRailAdd;
         } else {
           // sliding/stacker: outer perimeter + one internal upright per panel join,
           // plus one extra upright for the closing edge (panel closes against a separate fixed jamb member)
           const uprights = panels;
-          return 2 * (w + h) + uprights * h;
+          return 2 * (w + h) + uprights * h + midRailAdd;
         }
       }
     }
@@ -617,6 +620,11 @@
             </div>
 
             <div class="sub-fields">
+              <div class="field">
+                <label>Mid-Rails / Crossbars</label>
+                <input type="number" min="0" max="4" step="1" value="${o.midRails || 0}" oninput="updateOpeningLight(${o.id},'midRails',this.value)">
+                <div class="hint">Horizontal bar running the full width — e.g. a mid-rail at door handle height, or a glazing bar across a window. Each one adds a full width's length to lm. 0 if none.</div>
+              </div>
               ${typeFields}
               <div class="field" style="margin-top:0.85rem;">
                 <label>Coats</label>
@@ -655,6 +663,7 @@
           doorTypeLabel: DOOR_LABELS[o.doorType] || o.doorType,
           panelCount: o.panelCount,
           coats: Number(o.coats) || 2,
+          midRails: parseInt(o.midRails) || 0,
           lm: Number(computeLm(o).toFixed(3)),
           notes: o.notes,
           photo: o.photo
@@ -699,7 +708,8 @@
         const multText = (Number(o.frameMultiplier) || 1.0) !== 1.0 ? `, ${o.frameMultiplier}x frame` : '';
         const doorText = o.type === 'door' ? `, ${DOOR_LABELS[o.doorType] || o.doorType} (${o.panelCount} panel${o.panelCount == 1 ? '' : 's'})` : '';
         const coatsText = Number(o.coats) === 1 ? ', 1 COAT ONLY' : '';
-        doc.text(`${o.width}W x ${o.height}H${sashText}${cornerText}${doorText}${multText}${coatsText} — ${computeLm(o).toFixed(2)} lm`, margin, y);
+        const midRailText = (parseInt(o.midRails) || 0) > 0 ? `, ${o.midRails}x mid-rail` : '';
+        doc.text(`${o.width}W x ${o.height}H${sashText}${cornerText}${doorText}${multText}${coatsText}${midRailText} — ${computeLm(o).toFixed(2)} lm`, margin, y);
         y += 6;
         if (o.notes) {
           doc.setFontSize(9);
